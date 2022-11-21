@@ -2,14 +2,13 @@
 
 A Simple Shell Script To Commit And Push Automatically
 
-[中文文档](./Readme-CN.md)
 
 ## Usage
 
 Download the `git-auto` file
 
-```
-chmod +x git-auto
+```sh
+$ chmod +x git-auto
 ./git-auto
 ```
 
@@ -20,7 +19,7 @@ Exec=/bin/sh -c "/path/to/git-auto -d /path/to/logseq -pr & bg=$!; logseq; kill 
 ```
 
 Default behaviour:
-- The script will exit if there is already another instance of it running, use `-a` to bypass this.
+- The script will exit if there is already another instance is running, use `-a` to bypass this.
 - If it is interrupted before the next commit/push interval, the current changes will not be committed/pushed. Use `-e` to always make a final commit/push upon exit.
 
 More samples:

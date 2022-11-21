@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Logseq Desktop
+Exec=/bin/sh -c "/usr/bin/git-auto -d <logseq_graph> -pr &bg=$!; /usr/bin/logseq --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations; kill $bg"
+Terminal=false
+Type=Application
+Icon=logseq
+StartupWMClass=logseq
+Comment=A privacy-first, open-source platform for knowledge sharing and management.
+Categories=Office
+Actions=Wayland;
+
+[Desktop Action Wayland]
+Name=Wayland Backend
+Exec=/bin/sh -c "/usr/bin/git-auto -d <logseq_graph> -pr &bg=$!; /usr/bin/logseq --enable-features=UseOzonePlatform --ozone-platform=wayland; kill $bg"
