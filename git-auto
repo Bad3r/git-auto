@@ -60,18 +60,16 @@ shift $((OPTIND - 1))
 
 if [ "$allow_multiple" = 0 ]; then
     if pidof -o $$ -x "$script_name" >/dev/null; then
-        echo "$script_name already running"
+        echo "$script_name already running" >&2
         exit 1
     fi
 fi
 
-if [ -d "${directory-}" ]; then
-    cd "$directory"
-fi
+[ -d "${directory-}" ] \
+    && cd "$directory" \
+    || echo "Given directory ($directory) does not exist." >&2
 
-if [ -z "${branch-}" ]; then
-    branch=$(git rev-parse --abbrev-ref HEAD)
-fi
+[ -z "${branch-}" ] && branch=`git rev-parse --abbrev-ref HEAD`
 
 get_commit_message() {
     if [ -z "${commit_message-}" ]; then
@@ -91,20 +89,16 @@ auto_commit() {
     fi
 
     if [ 1 = "$push_to_server" ]; then
-
-        if [ 1 = "$rebase" ]; then
-            git pull --rebase "$server" "$branch"
-        else
-            git pull "$server" "$branch"
-        fi
+        [ 1 = "$rebase" ] \
+            && git pull --rebase "$server" "$branch" \
+            || git pull "$server" "$branch"
         git push "$server" "$branch"
 
     fi
 }
 
-if [ 1 = "$commit_on_exit" ] && [ 0 = "$once" ]; then
-    trap 'kill "$sleep_bg" 2>/dev/null; auto_commit; exit "$?"' INT HUP QUIT TERM
-fi 
+[ 1 = "$commit_on_exit" ] && [ 0 = "$once" ] \
+    && trap 'kill "$sleep_bg" 2>/dev/null; auto_commit; exit "$?"' INT HUP QUIT TERM
 
 if [ 1 = "$once" ]; then
     auto_commit
